@@ -1,6 +1,6 @@
-import QtQuick
-import Qt5Compat.GraphicalEffects
-import PanoramaK
+import QtQuick 2.15
+import QtGraphicalEffects 1.15
+import PanoramaK 1.0
 
 Rectangle {
     id: root

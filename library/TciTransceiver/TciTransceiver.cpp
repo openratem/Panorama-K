@@ -35,6 +35,12 @@ TciTransceiver::TciTransceiver(QObject *parent)
             emit trxChanged(tx);
         }
     });
+    connect(&m_tci, &TciClient::tuneChanged, this, [&](auto transceiver, auto tx){
+        if (transceiver == 0) {
+            m_trx = tx;
+            emit trxChanged(tx);
+        }
+    });
 }
 
 bool TciTransceiver::hasAnalizer() const

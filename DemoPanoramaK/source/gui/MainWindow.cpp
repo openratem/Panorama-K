@@ -1,14 +1,11 @@
 #include "MainWindow.h"
 #include <memory>
-#include <QQmlContext>
 #include <QtSerialPort>
 
 MainWindow::MainWindow(PowerSwrSeries<PowerSwrData> &series, QWidget *parent) :
     QMainWindow{parent}, m_powerSwrSeries{series}
 {
     setupUi(this);
-
-    registerQmlTypes();
     initialize();
 }
 
@@ -19,14 +16,6 @@ void MainWindow::initialize()
     //
     pGraphics = std::make_unique<Graphics>(m_powerSwrSeries).release();
     pLayoutService->addWidget(pGraphics);
-
-    // загрузка QML сцены для отображения окна оператора
-    pQmlWidget = std::make_unique<QQuickWidget>().release();
-    pQmlWidget->rootContext()->setContextProperty("main", this);
-    pQmlWidget->rootContext()->setContextProperty("controlObserver", pControl.get());
-    pQmlWidget->setSource(QUrl("qrc:/main.qml"));
-    pQmlWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    pLayoutMain->addWidget(pQmlWidget);
 
     // загрузка списка поддерживаемых трансиверов
     for (const auto &protocol : PanoramaK::TransceiverFactory::devices())
@@ -40,7 +29,9 @@ void MainWindow::initialize()
     connect(pControl.get(), &ControlObserver::protocolChanged, cbTransceivers, &QComboBox::setCurrentIndex);
     connect(pControl.get(), &ControlObserver::connectionStatusChanged, this, &MainWindow::onConnectionStatus);
     connect(pControl.get(), &ControlObserver::trxChanged, pGraphics, &Graphics::setAnalize);
-    connect(cbTransceivers, &QComboBox::currentIndexChanged, this, &MainWindow::onProtocol);
+    connect(pControl.get(), &ControlObserver::trxChanged, this, &MainWindow::onTrxMode);
+    connect(pControl.get(), &ControlObserver::statusChanged, this, &MainWindow::onStatus);
+    connect(cbTransceivers, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::onProtocol);
     connect(pbNetworkConnect, &QPushButton::toggled, this, &MainWindow::onOpen);
     connect(pbSerialPortOpen, &QPushButton::toggled, this, &MainWindow::onOpen);
 
@@ -48,6 +39,9 @@ void MainWindow::initialize()
     tabWidget->setCurrentIndex(0);
 
     onProtocol(cbTransceivers->currentIndex());
+    onStatus(pControl->status());
+    onConnectionStatus(pControl->connectionStatus());
+    onTrxMode(pControl->trx());
 }
 
 void MainWindow::setState(const QJsonObject &obj)
@@ -194,15 +188,70 @@ void MainWindow::onConnectionStatus(PanoramaK::ConnectionStatus status)
         pbNetworkConnect->setText(t_title);
     }
 
-    qDebug() << Q_FUNC_INFO << static_cast<int>(status);
+    lbTrxMode->setVisible(status == PanoramaK::ConnectionStatus::Connected);
+    lbAtuStatus->setVisible(status == PanoramaK::ConnectionStatus::Connected);
+    lbAtuDescription->setVisible(status == PanoramaK::ConnectionStatus::Connected);
+    
+    lbConnectStatus->setText(description(status));
 }
 
-void MainWindow::onStatusChanged(PanoramaK::Status status)
+void MainWindow::onStatus(PanoramaK::Status status)
 {
-
+    lbAtuStatus->setText(description(status, false));
+    lbAtuDescription->setText(description(status, true));
 }
 
-void MainWindow::registerQmlTypes()
+void MainWindow::onTrxMode(bool trxMode)
 {
-    qmlRegisterUncreatableMetaObject(PanoramaK::staticMetaObject, "PanoramaK", 1, 0, "PanoramaK", "Error: only enums");
+    lbTrxMode->setText(description(trxMode));
 }
+
+QString MainWindow::description(PanoramaK::ConnectionStatus status) const
+{
+    switch (status) {
+        case PanoramaK::ConnectionStatus::Disconnect: return tr("Выполните подключение к трансиверу");
+        case PanoramaK::ConnectionStatus::Connecting: return tr("Выполняется подключение к трансиверу");
+        case PanoramaK::ConnectionStatus::Connected: return tr("Подключение к трансиверу выполнено");
+        default: return {};
+    }
+}
+
+QString MainWindow::description(PanoramaK::Status status, bool details) const
+{
+    if (details) {
+        switch (status) {
+            case PanoramaK::Status::Ok: return tr("");
+            case PanoramaK::Status::ValidSwr: return tr("АФУ полностью исправно, но рекомендуется выполнить согласование.");
+            case PanoramaK::Status::HighSwr: return tr("Не рекомендуется эксплуатация АФУ, необходимо выполнить согласование.");
+            case PanoramaK::Status::VeryHighSwr: return tr("Эксплуатация запрещена, требуется сервисное обслуживание АФУ!");
+            case PanoramaK::Status::CableBreakage: return tr("Эксплуатация запрещена, требуется сервисное обслуживание АФУ!");
+            case PanoramaK::Status::BadContact: return tr("Эксплуатация запрещена, требуется сервисное обслуживание АФУ!");
+            default: return tr("");
+        }
+    }
+    else {
+        switch (status) {
+            case PanoramaK::Status::Ok: return tr("Состояние АФУ: исправно.");
+            case PanoramaK::Status::ValidSwr: return tr("Состояние АФУ: допустимое значение КСВ.");
+            case PanoramaK::Status::HighSwr: return tr("Состояние АФУ: высокое КСВ!");
+            case PanoramaK::Status::VeryHighSwr: return tr("Состояние АФУ: очень высокое КСВ!");
+            case PanoramaK::Status::CableBreakage: return tr("Состояние АФУ: обрыв кабеля!");
+            case PanoramaK::Status::BadContact: return tr("Состояние АФУ: плохой контакт!");
+            default: return tr("Состояние АФУ не определено.");
+        }
+    }
+}
+
+QString MainWindow::description(bool trxMode) const
+{
+    return trxMode ? tr("Режим передачи") : tr("Режим приёма");
+}
+
+
+
+
+
+
+
+
+

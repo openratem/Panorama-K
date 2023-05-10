@@ -3,7 +3,7 @@ TARGET   = DemoPanoramaK  # название
 
 #############################################################
 #                  подключение модулей QT6                  #
-QT += core gui widgets quickwidgets core5compat
+QT += core gui widgets
 #CONFIG += console
 #############################################################
 

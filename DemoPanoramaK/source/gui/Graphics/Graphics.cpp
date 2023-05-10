@@ -37,7 +37,7 @@ void Graphics::onUpdateGraphics()
 
     // подготовка данных для графика мощности и КСВ на 1 минуту
     double t_x {0}, t_step {0.05};
-    for (auto t_begin = m_readed.rbegin(); t_begin != (m_readed.rbegin() + qMin(PointsIn1min, m_readed.size())); t_begin++) {
+    for (auto t_begin = m_readed.rbegin(); t_begin != (m_readed.rbegin() + qMin<int>(PointsIn1min, m_readed.size())); t_begin++) {
         m_timeSeries1min.push_back(t_x);
         m_powerSeries1min.push_back((*t_begin).power);
         m_swrSeries1min.push_back((*t_begin).swr);
@@ -46,7 +46,7 @@ void Graphics::onUpdateGraphics()
 
     // подготовка данных для графика мощности и КСВ на 30 минуту
     t_x = 0, t_step = 0.05/60.0;
-    for (auto t_begin = m_readed.rbegin(); t_begin != (m_readed.rbegin() + qMin(PointsIn30min, m_readed.size())); t_begin++) {
+    for (auto t_begin = m_readed.rbegin(); t_begin != (m_readed.rbegin() + qMin<int>(PointsIn30min, m_readed.size())); t_begin++) {
         m_timeSeries30min.push_back(t_x);
         m_powerSeries30min.push_back((*t_begin).power);
         m_swrSeries30min.push_back((*t_begin).swr);

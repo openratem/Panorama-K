@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <QMainWindow>
-#include <QQuickWidget>
 #include <QJsonObject>
 #include <PowerSwrSeries.h>
 #include "../control/ControlObserver.h"
@@ -41,16 +40,19 @@ private slots:
     void onProtocol(int index);
     void onOpen(bool state);
     void onConnectionStatus(PanoramaK::ConnectionStatus status);
-    void onStatusChanged(PanoramaK::Status status);
+    void onStatus(PanoramaK::Status status);
+    void onTrxMode(bool trxMode);
 
 private:
-    void registerQmlTypes();
     void initialize();
     QJsonObject connectionSettings() const;
 
+    QString description(PanoramaK::ConnectionStatus status) const;
+    QString description(PanoramaK::Status status, bool details) const;
+    QString description(bool trxMode) const;
+
 private:
     PowerSwrSeries<PowerSwrData> &m_powerSwrSeries;
-    QQuickWidget *pQmlWidget {nullptr};
     Graphics *pGraphics {nullptr};
     std::shared_ptr<ControlObserver> pControl;
 };

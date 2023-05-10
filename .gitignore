@@ -1,0 +1,7 @@
+.idea/
+.qtc_clangd/
+.tmp/
+*.qmake.stash
+Makefile
+Makefile.*
+*.user
