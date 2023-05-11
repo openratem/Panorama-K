@@ -44,6 +44,7 @@ void Service::onProtocol(quint32 index)
 
     connect(pManager.get(), &PanoramaK::Manager::statusChanged, pControl.get(), &ControlObserver::setStatus);
     connect(pManager.get(), &PanoramaK::Manager::badContactDetected, pControl.get(), &ControlObserver::badContactDetectedNotify);
+    connect(pManager.get(), &PanoramaK::Manager::powerSwrValue, this, [&](auto, auto, auto swr){ emit currentSwr(swr); });
 }
 
 void Service::onOpen(const QJsonObject &config)

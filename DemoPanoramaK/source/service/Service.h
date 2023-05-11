@@ -9,12 +9,16 @@
 class Service final : public QObject
 {
     Q_OBJECT
+
 public:
     explicit Service(QObject *parent = nullptr);
 
     std::shared_ptr<ControlObserver> control();
 
     PowerSwrSeries<PowerSwrData> &series();
+
+signals:
+    void currentSwr(float value);
 
 private slots:
     void onProtocol(quint32 index);

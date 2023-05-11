@@ -13,6 +13,14 @@ Graphics::Graphics(PowerSwrSeries<PowerSwrData> &series, QWidget *parent)
     connect(&m_timer, &QTimer::timeout, this, &Graphics::onUpdateGraphics);
 }
 
+float Graphics::currentSWR() const
+{
+    if (m_swrSeries1min.empty())
+        return 1.0f;
+
+    return m_swrSeries1min.last();
+}
+
 void Graphics::setAnalize(bool enable)
 {
     if (enable)

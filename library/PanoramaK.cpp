@@ -42,14 +42,19 @@ struct Manager::impl
                 onStatus(Status::Unknown);
         });
 
-        QObject::connect(pAnalizer.get(), &PowerSwrAnalizerAbstract::powerSwrValue, pAnalizer.get(), [&](float, float swr){
-            onStatus(processSwr(m_swrFilter.process(swr), m_swrImpulseFilter.process(swr)));
+        QObject::connect(pAnalizer.get(), &PowerSwrAnalizerAbstract::powerSwrValue, pAnalizer.get(), [&](float watts, float swr){
+            const auto t_filteredSwr = m_swrFilter.process(swr);
+            emit m_context.powerSwrValue(watts, swr, t_filteredSwr);
+            onStatus(processSwr(t_filteredSwr, m_swrImpulseFilter.process(swr)));
         });
 
-        QObject::connect(pTransceiver.get(), &TransceiverAbstract::trxChanged, pTransceiver.get(), [&](bool){
-            m_swrFilter.reset();
-            m_swrImpulseFilter.reset();
-            m_status = PanoramaK::Status::Ok;
+        QObject::connect(pTransceiver.get(), &TransceiverAbstract::trxChanged, pTransceiver.get(), [&](bool txMode){
+            if (txMode) {
+                m_swrFilter.reset();
+                m_swrImpulseFilter.reset();
+                m_status = PanoramaK::Status::Unknown;
+                emit m_context.statusChanged(m_status);
+            }
         });
 
         QObject::connect(&m_context, &Manager::badContactDetected, pTransceiver.get(), [&](){
@@ -62,8 +67,10 @@ private:
         qDebug() << Q_FUNC_INFO << QString("(swr: %1, impulse: %2)").arg(swr).arg(impulse);
 
         // определяем состояние контактов
-        if (impulse > 1.0)
+        if (impulse > 1.0) {
             emit m_context.badContactDetected();
+            return Status(Status::BadContact);
+        }
 
         // определяем общее состояние АФУ
         if (swr <= 1.3f)

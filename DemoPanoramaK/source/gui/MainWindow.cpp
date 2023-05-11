@@ -111,6 +111,11 @@ std::shared_ptr<ControlObserver> MainWindow::control()
     return pControl;
 }
 
+void MainWindow::setSwr(float value)
+{
+    m_swr = value;
+}
+
 void MainWindow::onProtocol(int index)
 {
     swConnectConfiguration->setCurrentIndex(cbTransceivers->itemData(index).toInt());
@@ -232,9 +237,9 @@ QString MainWindow::description(PanoramaK::Status status, bool details) const
     else {
         switch (status) {
             case PanoramaK::Status::Ok: return tr("Состояние АФУ: исправно.");
-            case PanoramaK::Status::ValidSwr: return tr("Состояние АФУ: допустимое значение КСВ.");
-            case PanoramaK::Status::HighSwr: return tr("Состояние АФУ: высокое КСВ!");
-            case PanoramaK::Status::VeryHighSwr: return tr("Состояние АФУ: очень высокое КСВ!");
+            case PanoramaK::Status::ValidSwr: return tr("Состояние АФУ: допустимое значение КСВ: ") + QString::number(m_swr, 'f', 1) + ".";
+            case PanoramaK::Status::HighSwr: return tr("Состояние АФУ: высокое КСВ: ") + QString::number(m_swr, 'f', 1) + "!";
+            case PanoramaK::Status::VeryHighSwr: return tr("Состояние АФУ: очень высокое КСВ: ") + QString::number(m_swr, 'f', 1) + "!";
             case PanoramaK::Status::CableBreakage: return tr("Состояние АФУ: обрыв кабеля!");
             case PanoramaK::Status::BadContact: return tr("Состояние АФУ: плохой контакт!");
             default: return tr("Состояние АФУ не определено.");

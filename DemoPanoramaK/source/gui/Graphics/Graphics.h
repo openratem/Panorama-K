@@ -15,6 +15,8 @@ class Graphics final : public QWidget, private Ui::Graphics
 public:
     explicit Graphics(PowerSwrSeries<PowerSwrData> &series, QWidget *parent = nullptr);
 
+    float currentSWR() const;
+
 public slots:
     void setAnalize(bool enable);
 

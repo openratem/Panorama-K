@@ -36,6 +36,9 @@ public:
      */
     std::shared_ptr<ControlObserver> control();
 
+public slots:
+    void setSwr(float value);
+
 private slots:
     void onProtocol(int index);
     void onOpen(bool state);
@@ -55,5 +58,6 @@ private:
     PowerSwrSeries<PowerSwrData> &m_powerSwrSeries;
     Graphics *pGraphics {nullptr};
     std::shared_ptr<ControlObserver> pControl;
+    float m_swr {1.0f};
 };
 

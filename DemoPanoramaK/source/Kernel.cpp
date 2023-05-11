@@ -8,6 +8,7 @@ Kernel::Kernel()
 
     QObject::connect(qApp, &QApplication::commitDataRequest, qApp, [&](auto &val){ endOsSession(val); });
     QObject::connect(qApp, &QApplication::aboutToQuit, qApp, [&](){ onQuit(); });
+    QObject::connect(&m_service, &Service::currentSwr, &m_mainWindow, &MainWindow::setSwr);
 
     restoreSettings();
 }
