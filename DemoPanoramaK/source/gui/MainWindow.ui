@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabMain">
        <attribute name="title">
@@ -212,26 +212,11 @@
             <property name="rightMargin">
              <number>0</number>
             </property>
-            <item row="4" column="1">
-             <widget class="QComboBox" name="cbComportDtr">
-              <property name="currentIndex">
-               <number>0</number>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lbParity">
+              <property name="text">
+               <string>Контроль чётности</string>
               </property>
-              <item>
-               <property name="text">
-                <string>Не используется</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Включён</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Выключен</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="5" column="1">
@@ -256,17 +241,17 @@
               </item>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="lbRts">
+            <item row="4" column="0">
+             <widget class="QLabel" name="lbDtr">
               <property name="text">
-               <string>RTS</string>
+               <string>DTR</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lbBits">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lbPortName">
               <property name="text">
-               <string>Количество бит</string>
+               <string>Название порта</string>
               </property>
              </widget>
             </item>
@@ -276,19 +261,6 @@
                <string>Скорость, бит/с</string>
               </property>
              </widget>
-            </item>
-            <item row="6" column="1">
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
             </item>
             <item row="2" column="1">
              <widget class="QComboBox" name="cbComportData">
@@ -313,52 +285,6 @@
               <item>
                <property name="text">
                 <string>8</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="cbComportName"/>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lbPortName">
-              <property name="text">
-               <string>Название порта</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lbDtr">
-              <property name="text">
-               <string>DTR</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="cbComportParity">
-              <item>
-               <property name="text">
-                <string>Нет</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Even</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Odd</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Space</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Mark</string>
                </property>
               </item>
              </widget>
@@ -410,14 +336,85 @@
               </item>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lbParity">
+            <item row="1" column="1">
+             <widget class="QComboBox" name="cbComportParity">
+              <item>
+               <property name="text">
+                <string>Нет</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Even</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Odd</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Space</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Mark</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="lbRts">
               <property name="text">
-               <string>Контроль чётности</string>
+               <string>RTS</string>
               </property>
              </widget>
             </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lbBits">
+              <property name="text">
+               <string>Количество бит</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="cbComportDtr">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <item>
+               <property name="text">
+                <string>Не используется</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Включён</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Выключен</string>
+               </property>
+              </item>
+             </widget>
+            </item>
             <item row="7" column="1">
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="8" column="1">
              <widget class="QPushButton" name="pbSerialPortOpen">
               <property name="text">
                <string>Подключиться</string>
@@ -426,6 +423,19 @@
                <bool>true</bool>
               </property>
              </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="cbComportName"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="lbMeterPortName">
+              <property name="text">
+               <string>Порта измерителя КСВ</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QComboBox" name="cbMeterComportName"/>
             </item>
            </layout>
           </widget>

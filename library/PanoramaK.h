@@ -190,7 +190,7 @@ signals:
 class TransceiverFactory final
 {
 public:
-    TransceiverFactory() = delete;
+    TransceiverFactory();
 
     /**
      * \brief Возвращает список поддерживаемых моделей трансиверов.

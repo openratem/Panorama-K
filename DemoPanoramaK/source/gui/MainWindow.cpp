@@ -22,8 +22,10 @@ void MainWindow::initialize()
         cbTransceivers->addItem(protocol.name, static_cast<int>(protocol.interface));
 
     // получение доступных COM портов
-    for (const auto &info : QSerialPortInfo::availablePorts())
+    for (const auto &info : QSerialPortInfo::availablePorts()) {
         cbComportName->addItem(info.portName());
+        cbMeterComportName->addItem(info.portName());
+    }
 
     // настройка системы событий
     connect(pControl.get(), &ControlObserver::protocolChanged, cbTransceivers, &QComboBox::setCurrentIndex);
@@ -59,6 +61,12 @@ void MainWindow::setState(const QJsonObject &obj)
     if (obj.contains("networkOpen"))
         pbNetworkConnect->setChecked(obj["networkOpen"].toBool());
 
+    if (obj.contains("comPortAnalizer")) {
+        if (const auto t_portName = obj["comPort"].toString(); !t_portName.isEmpty()) {
+            if (const auto t_index = cbMeterComportName->findText(t_portName); t_index >= 0)
+                cbMeterComportName->setCurrentIndex(t_index);
+        }
+    }
 
     if (obj.contains("comPort")) {
         if (const auto t_portName = obj["comPort"].toString(); !t_portName.isEmpty()) {
@@ -95,6 +103,7 @@ QJsonObject MainWindow::state() const
     t_obj["networkAddress"] = leHostAddress->text();
     t_obj["networkOpen"] = QJsonValue(pbNetworkConnect->isChecked());
 
+    t_obj["comPortAnalizer"] = cbMeterComportName->currentText();
     t_obj["comPort"] = cbComportName->currentText();
     t_obj["comParity"] = cbComportParity->currentIndex();
     t_obj["comData"] = cbComportData->currentIndex();
@@ -170,6 +179,16 @@ QJsonObject MainWindow::connectionSettings() const
         t_serialPort["rts"]      = cbComportRts->currentIndex() == 1 ? 1 : 0;
 
         t_config["serialPort"] = t_serialPort;
+
+        QJsonObject t_serialPortAnalizer;
+        t_serialPortAnalizer["name"]     = cbMeterComportName->currentText();
+        t_serialPortAnalizer["parity"]   = "Нет";
+        t_serialPortAnalizer["data"]     = "8";
+        t_serialPortAnalizer["baudrate"] = "9600";
+        t_serialPortAnalizer["dtr"]      = 0;
+        t_serialPortAnalizer["rts"]      = 0;
+
+        t_config["analizer"] = t_serialPortAnalizer;
     }
 
     return t_config;

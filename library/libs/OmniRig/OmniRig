@@ -1,0 +1,3 @@
+#include "RigAbstract.h"
+#include "omnirig.h"
+#include "rig/parser/RigParser.h"

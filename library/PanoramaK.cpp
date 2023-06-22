@@ -1,15 +1,28 @@
 #include "PanoramaK.h"
 #include "TciTransceiver/TciTransceiver.h"
+#include "CatTransceiver/CatTransceiver.h"
 #include "SwrFilter/SwrFilter.h"
+#include <OmniRig>
 
 namespace PanoramaK {
 
-static QList<Protocol> Protocols {{"Не выбрано", ControlInterface::Unknown},
-                                  {"SunSDR TCI", ControlInterface::Network}};
+static QList<Protocol> Protocols;
 
+TransceiverFactory::TransceiverFactory()
+{
+
+}
 
 QList<Protocol> TransceiverFactory::devices()
 {
+    if (Protocols.empty()) {
+        Protocols.append({"Не выбрано", ControlInterface::Unknown});
+        Protocols.append({"SunSDR TCI", ControlInterface::Network});
+
+        for (auto &title : OmniRig::instance().protocols())
+            Protocols.append({title, ControlInterface::SerialPort});
+    }
+
     return Protocols;
 }
 
@@ -21,6 +34,10 @@ std::shared_ptr<TransceiverAbstract> TransceiverFactory::create(const QString &d
             // протокол SunSDR TCI
             return std::make_shared<TciTransceiver>();
         }
+         else if (itter->interface == ControlInterface::SerialPort) {
+             // протокол CAT
+             return std::make_shared<CatTransceiver>(device);
+         }
     }
 
     return {};
