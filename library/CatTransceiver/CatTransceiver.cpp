@@ -57,8 +57,10 @@ bool CatTransceiver::connectTo(const QJsonObject &config)
     m_serialPort.setRequestToSend(comportParams["rts"].toInt() != 0);
 
     // открываем порт анализатора мощности и КСВ
-    if (!pAnalizer->open(config["analizer"].toObject()))
+    if (!pAnalizer->open(config["analizer"].toObject())) {
+        m_serialPort.close();
         return false;
+    }
 
     pTransceiver = OmniRig::instance().createRig(m_serialPort, m_protocol);
     connect(pTransceiver.get(), &RigAbstract::connected, this, [&](){ onConnectStatus(ConnectionStatus::Connected); });

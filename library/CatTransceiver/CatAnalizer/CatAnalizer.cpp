@@ -42,7 +42,7 @@ bool CatAnalizer::open(const QJsonObject &config)
     if (!m_serialPort.open(QSerialPort::ReadWrite))
         return false;
 
-    return false;
+    return true;
 }
 
 void CatAnalizer::close()
