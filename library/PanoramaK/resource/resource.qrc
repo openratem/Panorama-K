@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/kernel"/>
+    <qresource prefix="/">
+        <file>CWrapPanoramaK.def</file>
+    </qresource>
+</RCC>

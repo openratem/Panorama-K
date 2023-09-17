@@ -1,0 +1,14 @@
+LIBRARY     CWrapPanoramaK.dll
+EXPORTS
+initialize
+finalize
+getErrorText
+returnSeries
+setProtocol
+deviceOpen
+deviceClose
+setFrequencyCallback
+setConnectionStatusCallback
+setStatusCallback
+setTrxCallback
+setBadContactCallback

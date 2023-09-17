@@ -1,0 +1,18 @@
+LIBRARY     PanoramaK.dll
+EXPORTS
+initialize
+finalize
+getErrorText
+createService
+deleteService
+getSeries
+getDevices
+setProtocol
+deviceOpen
+deviceClose
+setFrequencyCallback
+setConnectionStatusCallback
+setStatusCallback
+setTrxCallback
+setBadContactCallback
+setCurrentSwrCallback

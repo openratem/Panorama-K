@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
-# подключаем проект демо-программы
-SUBDIRS += DemoPanoramaK
+SUBDIRS += PanoramaK_App
+
+SUBDIRS += library
