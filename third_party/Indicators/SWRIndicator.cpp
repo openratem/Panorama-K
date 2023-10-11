@@ -1,6 +1,7 @@
 #include "SWRIndicator.h"
 
 #include <QPainter>
+#include <cmath>
 
 SWRIndicator::SWRIndicator(QWidget* parent)
     : QWidget { parent }

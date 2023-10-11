@@ -11,7 +11,7 @@ LibLoader::LibLoader()
     std::wstring path = QString("%1/PanoramaK.dll").arg(qApp->applicationDirPath()).toStdWString();
     instance = LoadLibraryW(path.data());
     if (!instance) {
-        qFatal() << Q_FUNC_INFO << "Failed to load PanoramaK.dll";
+        qFatal(Q_FUNC_INFO, "Failed to load PanoramaK.dll");
     }
 
     m_initialize = reinterpret_cast<pointerInitialize>(GetProcAddress(instance, "initialize"));
@@ -40,8 +40,8 @@ LibLoader::~LibLoader() = default;
 LibLoader::LibLoader()
 {
     instance = dlopen("./libPanoramaK.so", RTLD_LAZY);
-    if (!instance){
-        qFatal() << Q_FUNC_INFO << dlerror();
+    if (!instance) {
+        qFatal(Q_FUNC_INFO, dlerror());
     }
 
     m_initialize = reinterpret_cast<pointerInitialize>(dlsym(instance, "initialize"));
@@ -73,8 +73,8 @@ LibLoader::~LibLoader()
 LibLoader::LibLoader()
 {
     instance = dlopen("../../../libPanoramaK.dylib", RTLD_LAZY);
-    if (!instance){
-        qFatal() << Q_FUNC_INFO << dlerror();
+    if (!instance) {
+        qFatal(Q_FUNC_INFO, dlerror());
     }
 
     m_initialize = reinterpret_cast<pointerInitialize>(dlsym(instance, "initialize"));
@@ -101,9 +101,8 @@ LibLoader::~LibLoader()
 #elif defined(unix) || defined(__unix__) || defined(__unix)
 // unix
 #else
-#  error Unknown environment!
+#error Unknown environment!
 #endif
-
 
 void LibLoader::initialize()
 {
@@ -123,7 +122,7 @@ void LibLoader::finalize()
     m_finalize();
 }
 
-const char *LibLoader::getErrorText(ErrorCode code)
+const char* LibLoader::getErrorText(ErrorCode code)
 {
     if (m_getErrorText == nullptr)
         return nullptr;
