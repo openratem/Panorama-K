@@ -127,7 +127,7 @@ make
 библиотека PanoramaK должна лежать рядом с исполняемым файлом программы PanoramaK_App перед её запуском.
 
 ```
-cd ./Panorama-K/PanoramaK_App
+cd ../../PanoramaK_App
 qmake ./PanoramaK_App.pro
 make 
 ```
