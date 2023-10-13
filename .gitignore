@@ -1,6 +1,7 @@
 .idea/
 .qtc_clangd/
 .tmp/
+build/
 *.qmake.stash
 Makefile
 Makefile.*

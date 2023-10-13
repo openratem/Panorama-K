@@ -518,8 +518,13 @@ private:
 
     void onModulations(std::string_view text)
     {
-        if (const auto list = ee::tci::split(text, ':'); list.size() == 2)
+        if (const auto list = ee::tci::split(text, ':'); list.size() == 2) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+            emit m_context.modulationsListChanged(QString::fromStdString(std::string { list.at(1) }).split(",", QString::SkipEmptyParts));
+#else
             emit m_context.modulationsListChanged(QString::fromStdString(std::string { list.at(1) }).split(",", Qt::SkipEmptyParts));
+#endif
+        }
     }
 
     void onReady(std::string_view)

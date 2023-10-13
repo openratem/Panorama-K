@@ -33,3 +33,7 @@ HEADERS += source/loader/PanoramaKCommon.h
 
 HEADERS += source/loader/LibLoader.h
 SOURCES += source/loader/LibLoader.cpp
+
+unix {
+    LIBS += -ldl
+}

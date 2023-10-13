@@ -26,4 +26,3 @@ RESOURCES += $$PWD/resource/panoramak.qrc
 include(libs/tci/tci.pri)
 include(libs/OmniRig/OmniRig.pri)
 include(../../third_party/spdlog/spdlog.pri)
-include(../../third_party/range_v3/range_v3.pri)

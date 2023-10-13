@@ -1,6 +1,5 @@
 #include "CatAnalizer.h"
 #include <QMap>
-#include <range/v3/all.hpp>
 #include <string>
 
 static const QMap<QString, QSerialPort::Parity> ParityValues { { "Even", QSerialPort::Parity::EvenParity },
@@ -71,17 +70,11 @@ void CatAnalizer::parse(std::string_view text)
         return;
 
     // получаем все полные строки
-    std::string lines { text.data(), index };
-
-    // из каждой строки извлекаем занчение мощности и КСВ
-    auto values = lines | ranges::views::split('\n')
-        | ranges::views::transform([](auto&& range) { return std::string_view(&(*range.begin()), ranges::distance(range)); })
-        | ranges::to<std::vector>();
-
-    if (!values.empty()) {
-        auto t_values = QString::fromStdString(std::string { values.back() }).split(",");
-        if (t_values.size() == 2)
-            onPowerSwr(t_values.first().toFloat(), t_values.last().toFloat());
+    QStringList lines = QString::fromLatin1(text.data(), index).split("\n");
+    for (const auto &line : lines) {
+        auto values = line.trimmed().split(",");
+        if (values.size() == 2)
+            onPowerSwr(values.first().toFloat(), values.last().toFloat());
     }
 }
 

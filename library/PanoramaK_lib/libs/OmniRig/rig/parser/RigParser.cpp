@@ -103,7 +103,11 @@ void RigParser::processLine(QByteArray &&array)
 
     // определение полей
     if (t_text.contains("=")) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+        QStringList t_list = t_text.split("=", QString::SkipEmptyParts);
+#else
         QStringList t_list = t_text.split("=", Qt::SkipEmptyParts);
+#endif
         if (t_list.count() != 2)
             return;
         m_currentKeys[t_list.first()] = t_list.last();

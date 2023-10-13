@@ -4,7 +4,7 @@
 #include <complex>
 #include <memory>
 #include <QObject>
-#include <span>
+#include <gsl/span>
 
 /**
  * \class TciClient

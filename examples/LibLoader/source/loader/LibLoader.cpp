@@ -6,30 +6,29 @@
 #include <Windows.h>
 #include <string>
 
-LibLoader::LibLoader()
+LibLoader::LibLoader(std::wstring_view path)
 {
-    std::wstring path = QString("%1/PanoramaK.dll").arg(qApp->applicationDirPath()).toStdWString();
     instance = LoadLibraryW(path.data());
     if (!instance) {
         qFatal(Q_FUNC_INFO, "Failed to load PanoramaK.dll");
     }
 
-    m_initialize = reinterpret_cast<pointerInitialize>(GetProcAddress(instance, "initialize"));
-    m_finalize = reinterpret_cast<pointerFinalize>(GetProcAddress(instance, "finalize"));
-    m_getErrorText = reinterpret_cast<pointerGetErrorText>(GetProcAddress(instance, "getErrorText"));
-    m_createService = reinterpret_cast<pointerCreateService>(GetProcAddress(instance, "createService"));
-    m_deleteService = reinterpret_cast<pointerDeleteService>(GetProcAddress(instance, "deleteService"));
-    m_series = reinterpret_cast<pointerSeries>(GetProcAddress(instance, "getSeries"));
-    m_getDeviceInfo = reinterpret_cast<pointerGetDevices>(GetProcAddress(instance, "getDevices"));
-    m_setProtocol = reinterpret_cast<pointerSetProtocol>(GetProcAddress(instance, "setProtocol"));
-    m_open = reinterpret_cast<pointerOpen>(GetProcAddress(instance, "deviceOpen"));
-    m_close = reinterpret_cast<pointerClose>(GetProcAddress(instance, "deviceClose"));
-    m_setFrequencyCallback = reinterpret_cast<pointerSetFrequencyCallback>(GetProcAddress(instance, "setFrequencyCallback"));
-    m_setConnectionStatusCallback = reinterpret_cast<pointerSetConnectionStatusCallback>(GetProcAddress(instance, "setConnectionStatusCallback"));
-    m_setStatusCallback = reinterpret_cast<pointerSetStatusCallback>(GetProcAddress(instance, "setStatusCallback"));
-    m_setTrxCallback = reinterpret_cast<pointerSetTrxCallback>(GetProcAddress(instance, "setTrxCallback"));
-    m_setBadContactCallback = reinterpret_cast<pointerSetBadContactCallback>(GetProcAddress(instance, "setBadContactCallback"));
-    m_setCurrentSwrCallback = reinterpret_cast<pointerSetCurrentSwrCallback>(GetProcAddress(instance, "setCurrentSwrCallback"));
+    m_initialize = reinterpret_cast<pointerInitialize>(GetProcAddress((HMODULE)instance, "initialize"));
+    m_finalize = reinterpret_cast<pointerFinalize>(GetProcAddress((HMODULE)instance, "finalize"));
+    m_getErrorText = reinterpret_cast<pointerGetErrorText>(GetProcAddress((HMODULE)instance, "getErrorText"));
+    m_createService = reinterpret_cast<pointerCreateService>(GetProcAddress((HMODULE)instance, "createService"));
+    m_deleteService = reinterpret_cast<pointerDeleteService>(GetProcAddress((HMODULE)instance, "deleteService"));
+    m_series = reinterpret_cast<pointerSeries>(GetProcAddress((HMODULE)instance, "getSeries"));
+    m_getDeviceInfo = reinterpret_cast<pointerGetDevices>(GetProcAddress((HMODULE)instance, "getDevices"));
+    m_setProtocol = reinterpret_cast<pointerSetProtocol>(GetProcAddress((HMODULE)instance, "setProtocol"));
+    m_open = reinterpret_cast<pointerOpen>(GetProcAddress((HMODULE)instance, "deviceOpen"));
+    m_close = reinterpret_cast<pointerClose>(GetProcAddress((HMODULE)instance, "deviceClose"));
+    m_setFrequencyCallback = reinterpret_cast<pointerSetFrequencyCallback>(GetProcAddress((HMODULE)instance, "setFrequencyCallback"));
+    m_setConnectionStatusCallback = reinterpret_cast<pointerSetConnectionStatusCallback>(GetProcAddress((HMODULE)instance, "setConnectionStatusCallback"));
+    m_setStatusCallback = reinterpret_cast<pointerSetStatusCallback>(GetProcAddress((HMODULE)instance, "setStatusCallback"));
+    m_setTrxCallback = reinterpret_cast<pointerSetTrxCallback>(GetProcAddress((HMODULE)instance, "setTrxCallback"));
+    m_setBadContactCallback = reinterpret_cast<pointerSetBadContactCallback>(GetProcAddress((HMODULE)instance, "setBadContactCallback"));
+    m_setCurrentSwrCallback = reinterpret_cast<pointerSetCurrentSwrCallback>(GetProcAddress((HMODULE)instance, "setCurrentSwrCallback"));
 }
 
 LibLoader::~LibLoader() = default;
@@ -37,9 +36,9 @@ LibLoader::~LibLoader() = default;
 #elif defined(__linux__)
 #include <dlfcn.h>
 // linux
-LibLoader::LibLoader(std::string path)
+LibLoader::LibLoader(std::string_view path)
 {
-    instance = dlopen(path.c_str(), RTLD_LAZY);
+    instance = dlopen(path.data(), RTLD_LAZY);
     if (!instance) {
         qFatal(Q_FUNC_INFO, dlerror());
     }
@@ -70,9 +69,9 @@ LibLoader::~LibLoader()
 // macOS
 #include <dlfcn.h>
 
-LibLoader::LibLoader()
+LibLoader::LibLoader(std::string_view path)
 {
-    instance = dlopen("../../../libPanoramaK.dylib", RTLD_LAZY);
+    instance = dlopen(path.data(), RTLD_LAZY);
     if (!instance) {
         qFatal(Q_FUNC_INFO, dlerror());
     }

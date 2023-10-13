@@ -92,3 +92,7 @@ include(../third_party/Indicators/indicators.pri)
 #                  подключение файла ресурсов               #
 #############################################################
 RESOURCES += resource/resource.qrc
+
+unix {
+    LIBS += -ldl
+}

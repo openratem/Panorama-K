@@ -10,12 +10,12 @@
 namespace ee {
 
 
-settings::settings(QStringView path)
-  : m_path(path.toString())
+settings::settings(const QString &path)
+  : m_path(path)
 {
     //
-    m_pathBack = path.toString() + QStringLiteral(".back");
-    m_pathMd5  = path.toString() + QStringLiteral(".md5");
+    m_pathBack = m_path + QStringLiteral(".back");
+    m_pathMd5  = m_path + QStringLiteral(".md5");
 
     // если файл отсутствует, то создаём его
     if (QFileInfo t_info(m_path); !t_info.exists()) {
@@ -39,7 +39,7 @@ settings::settings(QStringView path)
     }
 }
 
-bool settings::setValue(QStringView key, const QJsonObject &value)
+bool settings::setValue(const QString &key, const QJsonObject &value)
 {
     std::lock_guard locker(m_mutex);
 
@@ -50,7 +50,7 @@ bool settings::setValue(QStringView key, const QJsonObject &value)
     return false;
 }
 
-QJsonObject settings::value(QStringView key) const
+QJsonObject settings::value(const QString &key) const
 {
     std::lock_guard locker(m_mutex);
 
@@ -107,12 +107,12 @@ void settings::load()
     file.close();
 }
 
-void settings::exportTo(QStringView fileName)
+void settings::exportTo(const QString &fileName)
 {
     std::lock_guard locker(m_mutex);
 
     // открываем файл для чтения
-    QFile file(fileName.toString());
+    QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly))
         return;
 
@@ -125,12 +125,12 @@ void settings::exportTo(QStringView fileName)
     file.close();
 }
 
-bool settings::importFrom(QStringView fileName)
+bool settings::importFrom(const QString &fileName)
 {
     std::lock_guard locker(m_mutex);
 
     // открываем файл для чтения
-    QFile file(fileName.toString());
+    QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
@@ -201,9 +201,9 @@ QByteArray settings::loadMD5() const
     return QByteArray();
 }
 
-QByteArray settings::clacMD5(QStringView fileName) const
+QByteArray settings::clacMD5(const QString &fileName) const
 {
-    if (QFile t_file(fileName.toString()); t_file.open(QFile::ReadOnly)) {
+    if (QFile t_file(fileName); t_file.open(QFile::ReadOnly)) {
         QCryptographicHash t_hash(QCryptographicHash::Md5);
         t_hash.addData(t_file.readAll());
         t_file.close();

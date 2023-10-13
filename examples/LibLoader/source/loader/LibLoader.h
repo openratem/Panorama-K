@@ -3,6 +3,7 @@
 
 #include "PanoramaKCommon.h"
 #include <string>
+#include <string_view>
 
 class LibLoader {
     typedef void (*pointerInitialize)();
@@ -23,7 +24,11 @@ class LibLoader {
     typedef ErrorCode (*pointerSetCurrentSwrCallback)(callbackCurrentSwr newCallback, ServiceDescriptor descriptor);
 
 public:
-    explicit LibLoader(std::string path);
+#if defined(_WIN32) || defined(__CYGWIN__)
+    explicit LibLoader(std::wstring_view path);
+#else
+    explicit LibLoader(std::string_view path);
+#endif
 
     ~LibLoader();
 
