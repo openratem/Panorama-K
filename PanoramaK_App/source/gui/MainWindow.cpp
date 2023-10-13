@@ -22,10 +22,6 @@ void MainWindow::initialize()
 {
     pControl = std::make_shared<ControlObserver>();
 
-#ifdef __linux__
-    this->setStyleSheet("background-color: #202020");
-#endif
-
     //
     pGraphics = std::make_unique<Graphics>(pPowerSwrSeries).release();
     pLayoutService->addWidget(pGraphics);
