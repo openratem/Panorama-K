@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
                     // Проверяем, существует ли файл.
                     if (!info.exists()) {
-                        qDebug() << "Файл: " << splitString.at(1) << " не существует";
+                        qDebug() << "The file " << splitString.at(1) << " not exist!";
                         break;
                     }
 
@@ -34,9 +34,9 @@ int main(int argc, char* argv[])
                     DeviceInfo* pDeviceinfo = libLoader.getDevices();
 
                     // Выводим список поддерживаемых устройств.
-                    qDebug() << "Список поддерживаемых устройств:";
+                    qDebug() << "Support devices:";
                     for (DeviceInfo* pInfo = pDeviceinfo->next; pInfo->next != nullptr;) {
-                        qDebug() << " - " << pInfo->name;
+                        qDebug() << " -" << pInfo->name;
                         pInfo = pInfo->next;
                     }
                     break;
@@ -45,11 +45,11 @@ int main(int argc, char* argv[])
         }
     } else {
 #ifdef Q_OS_WINDOWS
-        qDebug() << "Укажите путь до файла библиотеки, например: --path=D:\\path\\to\\libPanoramaK.dll";
+        qDebug() << "Specify the path to the library file, for example: --path=D:\\path\\to\\PanoramaK.dll";
 #elif defined(Q_OS_MACOS)
-        qDebug() << "Укажите путь до файла библиотеки, например: --path=path/to/library/libPanoramaK.dylib";
+        qDebug() << "Specify the path to the library file, for example: --path=path/to/library/libPanoramaK.dylib";
 #else
-        qDebug() << "Укажите путь до файла библиотеки, например: --path=path/to/library/libPanoramaK.so";
+        qDebug() << "Specify the path to the library file, for example: --path=path/to/library/libPanoramaK.so";
 #endif
     }
 
