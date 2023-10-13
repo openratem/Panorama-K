@@ -15,21 +15,21 @@ class settings final
 {
 public:
     settings() = delete;
-    explicit settings(QStringView path);
+    explicit settings(const QString &path);
 
     /**
      * \brief Добавляет группу настроек.
      * \param key - название группы настроек.
      * \param value - настройки.
      */
-    bool setValue(QStringView key, const QJsonObject &value);
+    bool setValue(const QString &key, const QJsonObject &value);
 
     /**
      * \brief Возвращает настройки именованной группы.
      * \param key - название группы настроек.
      * \return настройки заданной группы.
      */
-    [[nodiscard]] QJsonObject value(QStringView key) const;
+    [[nodiscard]] QJsonObject value(const QString &key) const;
 
     /**
      * \brief Записывает текущее состояние настроек в файл.
@@ -44,12 +44,12 @@ public:
     /**
      * \brief Записывает текущее состояние настроек в файл.
      */
-    void exportTo(QStringView fileName);
+    void exportTo(const QString &fileName);
 
     /**
      * \brief Чтение настроек из файла.
      */
-    bool importFrom(QStringView fileName);
+    bool importFrom(const QString &fileName);
 
 private:
     bool isCorrect() const;
@@ -57,7 +57,7 @@ private:
     void recover();
     void makeMD5();
 
-    QByteArray clacMD5(QStringView fileName) const;
+    QByteArray clacMD5(const QString &fileName) const;
     QByteArray loadMD5() const;
 
 private:
